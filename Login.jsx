@@ -6,7 +6,7 @@ import Footer from './Footer';
 import {Link} from 'react-router-dom'
 import './App.css'
 import './Login.css'
-import { createUserDocFromAuth, signInWithGooglePopup } from "./utils/firebase";
+import { createUserDocFromAuth, signInWithGooglePopup, signinAuthUserWithEmailAndPassword } from "./utils/firebase";
 
 const Login = (props)=>{
     const logGoogleUser = async () => {
@@ -19,6 +19,8 @@ const Login = (props)=>{
         password: ''
     })
 
+    const {email, password} = contact
+
     const handleChange = (event)=>{
         const {name, value} = event.target  
         setContact ((preValue)=>{
@@ -29,9 +31,23 @@ const Login = (props)=>{
         })
     }
 
-    return <div className='header-div'>
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+
+        try {
+            const response = await signinAuthUserWithEmailAndPassword(email, password);
+            console.log(response);
+        }
+        catch (error) {
+            console.log('error in login', error.message)
+        }
+    }
+
+    return <div>
 
         <Header />
+
+        <br></br>
 
         <Input
         name= 'email'
@@ -53,11 +69,11 @@ const Login = (props)=>{
 
         <br></br>
 
-        <Buttons
-            type = 'submit'
-            text = 'Login'
-        />
+       <button onClick={handleSubmit}>
+            Login
+       </button>
 
+        <br></br>
         <br></br>
 
         <button onClick={logGoogleUser}>
