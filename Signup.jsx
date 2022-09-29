@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import Input from './Input';
-import Buttons from './Buttons'
 import Header from './Header';
 import Footer from './Footer';
 import {Link} from 'react-router-dom'
@@ -13,10 +12,10 @@ const Signup = (props) => {
         displayName: '',
         email: '',
         password: '',
-        comfirmPassword: ''
+        confirmPassword: ''
     })
 
-    const {displayName, email, password, comfirmPassword} = contact;
+    const {displayName, email, password, confirmPassword} = contact;
     console.log(contact);
 
     const handleChange = (event) => {
@@ -33,32 +32,36 @@ const Signup = (props) => {
     {
         event.preventDefault();
 
-        if (password !== comfirmPassword){
+        if (password !== confirmPassword){
             alert('Password do not match!')
             return;
         }
 
         try{
-            const {user} = await createAuthUserWithEmailAndPassword(email, password)
-            await createUserDocFromAuth(user)
+            const {user} = await createAuthUserWithEmailAndPassword(email, password);
+            await createUserDocFromAuth(user, {displayName});
         }
         catch(error){
             console.log('error in creating user', error.message)
         }
     }
 
-    return <div className='header-div'>
+    return <div>
 
         <Header />
 
+        <br></br>
+
         <Input
-            name='name'
+            name='displayName'
             type='text'
             placeholder='name'
             onChange={handleChange}
-            value={contact.name}
+            value={contact.displayName}
         />
         
+        <br></br>
+
         <Input
             name='email'
             type='email'
@@ -77,14 +80,17 @@ const Signup = (props) => {
             value={contact.password}
         />
 
+        <br></br>
+
         <Input
-            name='comfirmPassword'
+            name='confirmPassword'
             type='password'
-            placeholder='comfirmPassword'
+            placeholder='confirmPassword'
             onChange={handleChange}
-            value={contact.password}
+            value={contact.confirmPassword}
         />
 
+        <br></br>
         <br></br>
 
         <button onClick={handleSubmit}>
